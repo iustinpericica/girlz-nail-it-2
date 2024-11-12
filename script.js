@@ -25,7 +25,7 @@ async function analyzeSentiment(text) {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer YOUR-KEY`
+            "Authorization": `Bearer ${config.API_KEY}`
         },
         body: JSON.stringify({
             model: "gpt-4-turbo",
