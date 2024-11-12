@@ -16,9 +16,9 @@ main {
 }
 
 input[type="text"] {
-    width: 80%; /* Adjusts the width to be 80% of the container */
-    padding: 0.75em; /* Adds more padding to increase height */
-    font-size: 1.2em; /* Increases font size for readability */
+    width: 80%;
+    padding: 0.75em;
+    font-size: 1.2em;
     margin: 0.5em;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -42,4 +42,19 @@ button:hover {
     margin-top: 1em;
     font-size: 1.2em;
     color: #333;
+}
+
+#historyLog {
+    list-style-type: none;
+    padding: 0;
+    margin-top: 1em;
+}
+
+#historyLog li {
+    background-color: #f9f9f9;
+    padding: 0.5em;
+    border: 1px solid #ddd;
+    margin-bottom: 0.5em;
+    border-radius: 4px;
+    text-align: left;
 }
