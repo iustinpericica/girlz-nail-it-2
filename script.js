@@ -3,13 +3,23 @@ function getTextInput() {
 }
 
 function displayResult(message) {
-    alert(message);
+    document.getElementById('result').innerText = message;
 }
 
-document.getElementById('analyzeButton').addEventListener('click', () => {
-    const text = getTextInput();
-    displayResult(`Analyzing sentiment for: "${text}"`);
+document.getElementById('analyzeButton').addEventListener('click', async () => {
+    const text = getTextInput().trim();
+    if (text === "") {
+        displayResult("Please enter some text to analyze.");
+        return;
+    }
+    try {
+        const sentiment = await analyzeSentiment(text);
+        displayResult(`Sentiment: ${sentiment}`);
+    } catch (error) {
+        displayResult("Error analyzing sentiment. Please try again.");
+    }
 });
+
 
 async function analyzeSentiment(text) {
     const response = await fetch("https://api.openai.com/v1/engines/davinci-codex/completions", {
