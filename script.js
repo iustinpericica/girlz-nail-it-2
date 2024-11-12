@@ -1,5 +1,17 @@
 const history = []; // Array to store notes
 
+// Load history from Local Storage
+function loadHistoryFromLocalStorage() {
+    const savedHistory = JSON.parse(localStorage.getItem('historyLog')) || [];
+    savedHistory.forEach(entry => history.push(entry)); // Load into history array
+    updateHistoryLog();
+}
+
+// Save history to Local Storage
+function saveHistoryToLocalStorage() {
+    localStorage.setItem('historyLog', JSON.stringify(history));
+}
+
 // Function to get input text
 function getTextInput() {
     return document.getElementById('textInput').value;
@@ -29,8 +41,10 @@ function addNote() {
         return;
     }
     const date = new Date().toLocaleString();
-    history.push({ date, note: text });
+    const newEntry = { date, note: text };
+    history.push(newEntry);
     updateHistoryLog();
+    saveHistoryToLocalStorage(); // Save updated history to Local Storage
     displayResult("Note added to history.");
     document.getElementById('textInput').value = ""; // Clear input after adding
 }
@@ -61,16 +75,28 @@ async function analyzeSentiment(text) {
         body: JSON.stringify({
             model: "gpt-4-turbo",
             messages: [
-                { role: "system", content: "You are a helpful assistant for analyzing sentiment. You must give advice to the user based on the user feelings." },
+                { role: "system", content: "You are a helpful assistant for analyzing sentiment." },
                 { role: "user", content: `Analyze the sentiment of this text: "${text}"` }
             ],
-            max_tokens: 4096
+            max_tokens: 1000
         })
     });
     const data = await response.json();
     return data.choices[0].message.content.trim();
 }
 
+// Function to clear history
+function clearHistory() {
+    history.length = 0; // Clear the history array
+    updateHistoryLog(); // Update display
+    localStorage.removeItem('historyLog'); // Remove from Local Storage
+    displayResult("History cleared.");
+}
+
+// Load history when page loads
+window.addEventListener('load', loadHistoryFromLocalStorage);
+
 // Event listeners
 document.getElementById('addNoteButton').addEventListener('click', addNote);
 document.getElementById('analyzeAllButton').addEventListener('click', analyzeAllNotes);
+document.getElementById('clearHistoryButton').addEventListener('click', clearHistory);
