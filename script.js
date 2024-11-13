@@ -100,3 +100,31 @@ window.addEventListener('load', loadHistoryFromLocalStorage);
 document.getElementById('addNoteButton').addEventListener('click', addNote);
 document.getElementById('analyzeAllButton').addEventListener('click', analyzeAllNotes);
 document.getElementById('clearHistoryButton').addEventListener('click', clearHistory);
+
+async function getImageFromOpenAI() {
+    const apiKey = config.API_KEY;
+    const url = 'https://api.openai.com/v1/images/generations';
+
+    const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${apiKey}`
+        },
+        body: JSON.stringify({
+            model: 'dall-e-3',
+            prompt: 'A happy dog on a beach in Santa Monica'
+        })
+    });
+
+    if (!response.ok) {
+        throw new Error('Network response was not ok');
+    }
+
+    const responseJson = await response.json();
+    console.log(responseJson);
+    document.getElementById('myImage').src = responseJson.data[0].url;
+    return data;
+}
+
+document.getElementById('generateImage').addEventListener('click', getImageFromOpenAI)
